@@ -1,0 +1,46 @@
+version: '2'
+
+services:
+  postgres:
+    image: postgres:11.6
+    environment: 
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=whosbug2021
+    networks:
+      - whosbug
+    ports:
+      - "0.0.0.0:5432:5432"
+  web:
+    restart: always
+    environment:
+      - DJANGO_SECRET_KEY=local
+      - WHOSBUG_POSTGRES_CHECK_TIMEOUT=30
+      - WHOSBUG_POSTGRES_CHECK_INTERVAL=1
+      - DB_CONN=postgresql://root:whosbug2021@postgres:5432/postgres
+    image: web
+    build: .
+    command: >
+      bash -c "python wait_for_postgres.py &&
+               python ./manage.py makemigrations &&
+               python ./manage.py migrate &&
+               python ./manage.py runserver 0.0.0.0:8081"
+    volumes:
+      - ./:/code
+    ports:
+      - "0.0.0.0:8081:8081"
+    depends_on:
+      - postgres
+    networks:
+      - whosbug
+  documentation:
+    restart: always
+    build: ./
+    command: "mkdocs serve"
+    volumes:
+      - ./:/code
+    ports:
+      - "8001:8001"
+
+networks:
+  whosbug:
+    driver: bridge

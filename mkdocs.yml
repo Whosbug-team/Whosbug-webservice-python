@@ -1,0 +1,12 @@
+site_name: whosbug
+site_description: WhosBug
+repo_url: https://e.coding.net/f1ed/whosbug-uestc/whosbug.git
+site_dir: site
+copyright: Copyright &copy; 2020, <a href="https://github.com/kevinello">Kevinello</a>.
+dev_addr: 0.0.0.0:8001
+
+nav:
+  - Home: 'index.md'
+  - API:
+    - Authentication: 'api/authentication.md'
+    - Users: 'api/users.md'
