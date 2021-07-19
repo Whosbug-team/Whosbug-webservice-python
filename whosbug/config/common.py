@@ -41,14 +41,6 @@ class Common(Configuration):
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
     )
 
-    SWAGGER_SETTINGS = {
-        'SECURITY_DEFINITIONS': {
-            'basic': {
-                'type': 'basic'
-            }
-        },
-    }
-
     ALLOWED_HOSTS = ["*"]
     ROOT_URLCONF = 'whosbug.urls'
     SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
