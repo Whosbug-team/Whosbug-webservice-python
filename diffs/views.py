@@ -130,9 +130,9 @@ def commit_diffs(request):
         properties={
             'PID': openapi.Schema(type="string"),
             'version': openapi.Schema(type="string"),
-            'match_choice(exact|prop)': openapi.Schema(
+            'match_choice(exact|fuzzy)': openapi.Schema(
                 type="string",
-                enum=['exact', 'prop']
+                enum=['exact', 'fuzzy']
             ),
             'stacks': openapi.Schema(
                 type="array",

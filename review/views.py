@@ -7,6 +7,7 @@ from review.serializers import RuleSerializer
 from diffs.serializers import ProjectSerializer
 from diffs.models import Project
 
+
 @api_view(['POST'])
 def commit_reviewers(request):
     """
