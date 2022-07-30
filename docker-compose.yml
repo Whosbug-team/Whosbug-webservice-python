@@ -5,7 +5,7 @@ services:
     image: postgres:11.6
     environment: 
       - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=whosbug2021
+      - POSTGRES_PASSWORD=whosbug2022
     networks:
       - whosbug
     ports:
@@ -16,30 +16,44 @@ services:
       - DJANGO_SECRET_KEY=local
       - WHOSBUG_POSTGRES_CHECK_TIMEOUT=30
       - WHOSBUG_POSTGRES_CHECK_INTERVAL=1
-      - DB_CONN=postgresql://root:whosbug2021@postgres:5432/postgres
+      - DB_CONN=postgresql://root:whosbug2022@postgres:5432/postgres
     image: web
     build: .
     command: >
-      bash -c "python wait_for_postgres.py &&
+      bash -c "pip install -r requirements.txt &&
+               pip install daphne tqdm &&
+               python wait_for_postgres.py &&
                python ./manage.py makemigrations &&
                python ./manage.py migrate &&
-               python ./manage.py runserver 0.0.0.0:8081"
+               daphne -b 0.0.0.0 -p 8081 whosbug.asgi:application"
     volumes:
       - ./:/code
     ports:
       - "0.0.0.0:8081:8081"
-    depends_on:
-      - postgres
     networks:
       - whosbug
-  documentation:
-    restart: always
-    build: ./
-    command: "mkdocs serve"
-    volumes:
-      - ./:/code
-    ports:
-      - "0.0.0.0:8001:8001"
+  # web_old:
+  #   restart: always
+  #   environment:
+  #     - DJANGO_SECRET_KEY=local
+  #     - WHOSBUG_POSTGRES_CHECK_TIMEOUT=30
+  #     - WHOSBUG_POSTGRES_CHECK_INTERVAL=1
+  #     - DB_CONN=postgresql://root:whosbug2022@postgres:5432/postgres
+  #   image: web
+  #   build: .
+  #   command: >
+  #     bash -c "python wait_for_postgres.py &&
+  #              python ./manage.py makemigrations &&
+  #              python ./manage.py migrate &&
+  #              python ./manage.py runserver 0.0.0.0:8001"
+  #   volumes:
+  #     - ./:/code
+  #   ports:
+  #     - "0.0.0.0:8001:8001"
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - whosbug
 
 networks:
   whosbug:

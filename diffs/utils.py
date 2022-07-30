@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from typing import List
+from django.http import JsonResponse
 from diffs.bug_owner import Method
 from diffs.bug_owner import BugOwner
-
+from diffs.models import Object
 
 def get_matched_methods(all_objects, methods: list, file_paths: list):
     # match name and file_path
@@ -18,7 +18,7 @@ def get_matched_methods(all_objects, methods: list, file_paths: list):
     return all_matched_methods, all_matched_methods_hash
 
 
-def get_reviewers(methods: List[Method], review_objects, reviewer_cnt: dict):
+def get_reviewers(methods: Method, review_objects, reviewer_cnt: dict):
     # get reviewers of all matched methods
     for method in methods:
         reviewers = review_objects.filter(file_path__contains=method.file_path)
@@ -97,4 +97,20 @@ def analysis_total(reviewer_cnt: dict, owner_confidence: dict):
         }
         analysis.append(result)
     return reviewers, analysis
+
+
+def generate_object_dict(jsonres, method: Object, commit) -> dict:
+    return {
+        "method_id": method.object_id,
+        "path": method.path,
+        "parameters": method.parameters,
+        "method_owner": {
+            "author": commit.author,
+            "email": commit.email,
+            "time": commit.time,
+            "confidence": method.confidence
+        },
+        "owner_list": method.owner_info
+    }
+
 

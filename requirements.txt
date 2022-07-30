@@ -1,6 +1,6 @@
 # Core
 pytz==2020.1
-Django==3.0.8
+Django==3.1.0
 django-configurations==2.2
 gunicorn==20.0.4
 newrelic==5.14.1.144
@@ -8,6 +8,9 @@ newrelic==5.14.1.144
 # For the persistence stores
 psycopg2-binary==2.8.5
 dj-database-url==0.5.0
+
+# tps
+tpspy~=0.9.1
 
 # Model Tools
 django-model-utils==4.0.0
@@ -19,6 +22,7 @@ Markdown==3.2.2
 django-filter==2.3.0
 django-rest-swagger
 drf-yasg
+
 
 # Developer Tools
 ipdb==0.13.3
@@ -45,4 +49,4 @@ pyOpenSSL
 # cryptoo
 pycrypto==2.6.1
 
-
+numpy==1.19.5
