@@ -14,4 +14,4 @@ EXPOSE 8081
 
 # Run the production server
 # CMD bash -c "python wait_for_postgres.py && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
-CMD bash -c "python wait_for_postgres.py && python manage.py runserver 0.0.0.0:8081"
+CMD bash -c "python wait_for_postgres.py && python manage.py runserver 0.0.0.0:8081 && python manage.py collectstatic"

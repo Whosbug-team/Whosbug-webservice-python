@@ -108,3 +108,6 @@ venv.bak/
 .mypy_cache/
 
 .idea
+
+# postgres持久化数据
+data/postgres/*

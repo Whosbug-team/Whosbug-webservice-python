@@ -1,9 +1,6 @@
 # whosbug-web
 
-[![Build Status](https://travis-ci.org/f1ed/whosbug-web.svg?branch=master)](https://travis-ci.org/f1ed/whosbug-web)
 [![Built with](https://img.shields.io/badge/Built_with-Cookiecutter_Django_Rest-F7B633.svg)](https://github.com/agconti/cookiecutter-django-rest)
-
-WhosBug Check out the project's [documentation](https://f1ed.coding.net/p/whosbug-uestc/d/whosbug-webservice/git).
 
 # Prerequisites
 
