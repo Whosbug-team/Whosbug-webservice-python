@@ -1,0 +1,66 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "docker-run",
+      "label": "docker-run: whosbug",
+      "dependsOn": [
+        "docker-build",
+        "docker-run: postgres"
+      ],
+      "dockerRun": {
+        "containerName": "whosbug-webservice",
+        "volumes": [
+          {
+            "containerPath": "/code",
+            "localPath": "${workspaceFolder}"
+          }
+        ],
+        "env": {
+          "DJANGO_SECRET_KEY": "local",
+          "WHOSBUG_POSTGRES_CHECK_TIMEOUT": "30",
+          "WHOSBUG_POSTGRES_CHECK_INTERVAL": "1",
+          "DB_CONN": "postgresql://root:whosbug2022@localhost:5432/postgres",
+        },
+        "image": "whosbug_webservice:latest",
+        "ports": [
+          {
+            "containerPort": 8081,
+            "hostPort": 8081,
+          }
+        ],
+        "command": "bash -c 'python wait_for_postgres.py && python ./manage.py makemigrations && python ./manage.py migrate && python ./manage.py runserver 0.0.0.0:8081'"
+      },
+    },
+    {
+      "type": "docker-build",
+      "label": "docker-build",
+      "dockerBuild": {
+        "dockerfile": "Dockerfile",
+        "context": ".",
+        "tag": "whosbug_webservice:latest",
+      }
+    },
+    // postgres
+    {
+      "type": "docker-run",
+      "label": "docker-run: postgres",
+      "dockerRun": {
+        "containerName": "whosbug-postgres",
+        "env": {
+          "POSTGRES_USER": "root",
+          "POSTGRES_PASSWORD": "whosbug2022",
+        },
+        "image": "postgres:11.6",
+        "ports": [
+          {
+            "containerPort": 5432,
+            "hostPort": 5432
+          }
+        ],
+      }
+    }
+  ]
+}

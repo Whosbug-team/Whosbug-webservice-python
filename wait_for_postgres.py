@@ -35,4 +35,5 @@ def pg_isready(DB_CONN):
 
 
 if __name__ == '__main__':
+    print(f'DB_CONN: {config["DB_CONN"]}')
     pg_isready(config['DB_CONN'])

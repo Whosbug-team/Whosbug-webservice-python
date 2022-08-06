@@ -543,30 +543,28 @@ def get_confidence_and_infos(request):
         logging.exception(f"Release {release} not exists")
         return Response(f"Release {release} not exists")
 
-    jsonres = {"status": "ok", "message": "", "objects": {}}
+    response = {"status": "ok", "message": "", "objects": {}}
     for report_method in report_methods:
-
         # 基于object-id做筛选
         methods_id = Object.objects.filter(
             commit__release=release, object_id=report_method['method_id'])
         if len(methods_id) == 0:
             logging.exception("Get objects error:")
-            jsonres['message'] = f"No such objects in release:{release}"
-            jsonres['status'] = "may be ok"
+            response['message'] = f"No such objects in release:{release}"
+            response['status'] = "may be ok"
             continue
 
         # 在前置基础上依据path做筛选
         methods_path = methods_id.filter(path=report_method['filepath'])
         if len(methods_path) == 0:
             logging.exception("Get objects error:")
-            jsonres[
-                'message'] = f"No such objects in path:{report_method['filepath']}, here's results with id"
+            response['message'] = f"No such objects in path:{report_method['filepath']}, here's results with id"
             for method in methods_id:
                 commit = Commit.objects.get(id=method.commit_id)
-                jsonres["objects"][report_method['method_id']] = []
-                jsonres["objects"][report_method['method_id']].append(
-                    generate_object_dict(jsonres, method, commit))
-            jsonres['status'] = "may be ok"
+                response["objects"][report_method['method_id']] = []
+                response["objects"][report_method['method_id']].append(
+                    generate_object_dict(method, commit))
+            response['status'] = "may be ok"
             continue
 
         # 在此基础上依据params做筛选
@@ -574,17 +572,17 @@ def get_confidence_and_infos(request):
             parameters=report_method['parameters'])
         if len(methods_params) == 0:
             logging.exception("Get objects error:")
-            jsonres[
+            response[
                 'message'] = f"No such objects in params: {report_method['parameters']}, here's results with path"
             for method in methods_path:
                 commit = Commit.objects.get(id=method.commit_id)
-                jsonres["objects"][report_method['method_id']] = []
-                jsonres["objects"][report_method['method_id']].append(
-                    generate_object_dict(jsonres, method, commit))
-            jsonres['status'] = "may be ok"
+                response["objects"][report_method['method_id']] = []
+                response["objects"][report_method['method_id']].append(
+                    generate_object_dict(method, commit))
+            response['status'] = "may be ok"
             continue
 
-    return JsonResponse(jsonres)
+    return JsonResponse(response)
 
 
 def get_encrypted_text(request):

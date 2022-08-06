@@ -99,7 +99,7 @@ def analysis_total(reviewer_cnt: dict, owner_confidence: dict):
     return reviewers, analysis
 
 
-def generate_object_dict(jsonres, method: Object, commit) -> dict:
+def generate_object_dict(method: Object, commit) -> dict:
     return {
         "method_id": method.object_id,
         "path": method.path,
